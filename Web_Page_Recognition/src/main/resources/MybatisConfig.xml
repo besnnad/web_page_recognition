@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!--    引入外部配置文件-->
+	<properties resource="properties/jdbc.properties"/>
+
+	<settings>
+		<!-- 打开延迟加载 的开关 -->
+		<setting name="lazyLoadingEnabled" value="true" />
+		<!-- 将积极加载改为消极加载即按需要加载 -->
+		<setting name="aggressiveLazyLoading" value="false" />
+		<!-- 开启二级缓存  useCache=false禁用 flushCache="true"刷新缓存-->
+		<setting name="cacheEnabled" value="true" />
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+
+	<!-- 配置别名-->
+	<typeAliases>
+		<package name="org.example.sql.model"/>
+	</typeAliases>
+	<environments default="mysql">
+		<!-- 配置数据源  -->
+		<environment id="mysql">
+			<!--使用JDBC事务管理-->
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driverClass}"/>
+				<property name="url" value="${jdbc.url}"/>
+				<property name="username" value="${jdbc.username}"/>
+				<property name="password" value="${jdbc.password}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<!-- 映射文件路径 -->
+	<mappers>
+		<!--        <mapper class="dao.IUserDao"/>-->
+		<mapper resource="mapper/match-mapper.xml"/>
+	</mappers>
+
+
+</configuration>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Webpage Recognition</title>
+</head>
+<body>
+<h1>识别反馈</h1>
+<div th:if="${ message }">
+    <h2 th:text="'  Result : '+${ message }"></h2>
+    <h2 th:text="'  Target Web Page Url : '+${ target_url}"></h2>
+    <h2 th:text="'  Match Web Page Url :'+${ url }"></h2>
+    <h2 th:text="'  Page_id : ' + ${ page_id }"></h2>
+    <h2 th:text="'  Page Similarity : '+${ sim }"></h2>
+</div>
+</body>
+</html>

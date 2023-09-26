@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.sql.mapper.MatchMapper">
+    <select id="getCandidateSetByWords" resultType="IndexResult" useCache="false" flushCache="true">
+        <if test="threshold != null">select * from (</if>
+
+        select page_id,count(word) `count` from inverted_index where word in
+        (<foreach collection="list" item="s" separator=",">#{s}</foreach>) group by page_id
+
+        <if test="threshold != null">) t where `count` > #{threshold}</if>
+    </select>
+
+    <select id="selectFeatureWordsCount" resultType="IndexResult" useCache="false" flushCache="true">
+        select page_id,count(word) `count`
+        from inverted_index word
+        group by page_id;
+    </select>
+
+    <select id="selectFeatureWordsByPageID" parameterType="int" resultType="InvertedIndex" useCache="false" flushCache="true">
+        select * from inverted_index where page_id = #{page_id}
+    </select>
+
+    <select id="selectFingerprintsByPageIds" resultType="Fingerprint" useCache="false" flushCache="true">
+        select page_id,fpdata
+        from fingerprint
+        where page_id in (<foreach collection="list" item="s" separator=",">#{s}</foreach>)
+    </select>
+    
+    <select id="selectFingetprintByPageId" resultType="Fingerprint" useCache="false" flushCache="true">
+        select *
+        from fingerprint
+        where page_id=#{page_id};
+    </select>
+
+    <select id="selectHostByIp" resultType="java.lang.String" useCache="false" flushCache="true">
+        select host from ip_host where ip = #{ip}
+    </select>
+
+    <select id="selectUrlByPageID" resultType="java.lang.String" useCache="false" flushCache="true">
+        select url from page_url where page_id = #{id}
+    </select>
+
+    <select id="selectAllPagetoUrl" resultType="PagetoUrl">
+        select * from page_url
+    </select>
+
+    <select id="selectWebsiteByName" resultType="Website">
+        select *
+        from website
+        where name = #{name}
+    </select>
+
+    <select id="selectFingerprint" resultType="Fingerprint" useCache="false" flushCache="true">
+        select * from fingerprint
+    </select>
+
+    <select id="selectFeatureWords" resultType="InvertedIndex" useCache="false" flushCache="true">
+        select * from inverted_index
+    </select>
+
+    <insert id="insertFingerprints">
+        INSERT INTO fingerprint (page_id,last_update,fpdata) VALUES
+        <foreach collection="list" item="s" separator=",">
+            (#{s.pageId},#{s.lastUpdate},#{s.fpdata})
+        </foreach>
+    </insert>
+
+    <insert id="insertFeatureWords">
+        INSERT INTO inverted_index (page_id,word,frequency,word_index) VALUES
+        <foreach collection="list" item="s" separator=",">
+            (#{s.pageId},#{s.word},#{s.frequency},#{s.index})
+        </foreach>
+    </insert>
+
+    <insert id="insertIptoHost" useGeneratedKeys="true" keyProperty="id" parameterType="IptoHost">
+        INSERT INTO ip_host (ip,host) VALUES
+            (#{ip},#{host})
+    </insert>
+
+    <insert id="insertPagetoUrl">
+        INSERT INTO page_url (page_id,url) VALUES
+        <foreach collection="list" item="s" separator=",">
+            (#{s.pageId},#{s.url})
+        </foreach>
+    </insert>
+
+    <insert id="insertWebsite">
+        INSERT INTO website (id,name) VALUES
+        <foreach collection="list" item="s" separator=",">
+            (#{s.id},#{s.name})
+        </foreach>
+    </insert>
+
+    <insert id="insertOneWebsite">
+        insert into website (id, name)
+        values (#{id},#{name});
+    </insert>
+    
+    <delete id="deleteFpById">
+        delete
+        from fingerprint
+        where page_id = #{page_id};
+    </delete>
+
+    <delete id="deleteFeatureWordById">
+        delete
+        from inverted_index
+        where page_id = #{page_id};
+    </delete>
+
+    <delete id="deletePagetoUrlById">
+        delete
+        from page_url
+        where page_id = #{page_id};
+    </delete>
+</mapper>

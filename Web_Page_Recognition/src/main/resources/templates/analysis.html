@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Webpage Recognition</title>
+</head>
+<body>
+
+<div th:if="${ message }">
+    <h2 th:text="'  Result : '+${ message }"></h2>
+    <h2 th:text="'  SNI : ' + ${ SNI }"></h2>
+    <h2 th:text="'  Real Domain : ' + ${ host }"></h2>
+    <h2 th:text="'  Is Valid : '+${ valid }"></h2>
+</div>
+</body>
+</html>
